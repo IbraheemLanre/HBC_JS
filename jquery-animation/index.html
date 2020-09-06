@@ -53,6 +53,21 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+      $.ajax({
+        type: "GET",
+        url: "https://pokeapi.co/api/v2/pokemon",
+        success: function (resp) {
+          console.log("Yay! AJAX call was successful");
+          console.log(resp);
+
+          console.log("Found " + resp.count + "pokemons from the database");
+          console.log("The first pokemon is " + resp.results[0].name);
+        },
+        error: function () {
+          console.log("Ooooh! AJAX call was not succesful");
+        },
+      });
+
       var skillSet = ["friendly", "hard-working", "funny"];
       var counter = 0;
       function myFunction() {
