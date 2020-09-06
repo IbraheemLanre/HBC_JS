@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jQuery Animation</title>
+    <style>
+      html * {
+        margin: 5px;
+      }
+      #title {
+        background: black;
+        text-align: center;
+        width: 100%;
+        height: 50px;
+        color: white;
+        vertical-align: middle;
+      }
+
+      #box1 {
+        background: red;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">
+      <h1>jQuery Amination lecture</h1>
+    </div>
+
+    <button id="fadeIn">Fade In</button>
+    <button id="fadeOut">Fade Out</button>
+    <button id="fadeToggle">Fade Toggle</button>
+    <button id="stop">Stop Animation</button>
+
+    <div id="box1"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      function completeAnimation() {
+        alert("Done!");
+      }
+      $("#fadeIn").on("click", function () {
+        $("#box1").fadeIn(5000, completeAnimation);
+      });
+      $("#fadeOut").on("click", function () {
+        $("#box1").fadeOut();
+      });
+      $("#fadeToggle").on("click", function () {
+        $("#box1").fadeToggle();
+      });
+      $("#stop").on("click", function () {
+        $("#box1").stop();
+      });
+    </script>
+  </body>
+</html>
