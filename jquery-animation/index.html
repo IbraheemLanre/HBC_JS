@@ -8,16 +8,27 @@
       html * {
         margin: 5px;
       }
+
       #title {
         background: black;
         text-align: center;
         width: 100%;
-        height: 50px;
+        height: 500px;
         color: white;
-        vertical-align: middle;
       }
 
-      #box1 {
+      #title h1 {
+        height: 100%;
+        vertical-align: middle;
+        font-family: "Impact";
+      }
+
+      #title h1 .skill {
+        color: yellowgreen;
+      }
+
+      #box1,
+      #box2 {
         background: red;
         width: 100px;
         height: 100px;
@@ -26,18 +37,34 @@
   </head>
   <body>
     <div id="title">
-      <h1>jQuery Amination lecture</h1>
+      <h1>I am <span class="skill">friendly</span></h1>
     </div>
 
     <button id="fadeIn">Fade In</button>
     <button id="fadeOut">Fade Out</button>
     <button id="fadeToggle">Fade Toggle</button>
     <button id="stop">Stop Animation</button>
+    <button id="slideDown">Slide Down</button>
+    <button id="slideUp">Slide Up</button>
+    <button id="animate">Animate</button>
 
     <div id="box1"></div>
+    <div id="box2"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+      var skillSet = ["friendly", "hard-working", "funny"];
+      var counter = 0;
+      function myFunction() {
+        var nextIndex = counter % skillSet.length;
+        var skill = skillSet[nextIndex];
+        $("#title h1 .skill").text(skill);
+        $("#title h1 .skill").fadeTo(1);
+        $("#title h1 .skill").fadeTo(0.01);
+        counter += 1;
+      }
+      setInterval(myFunction, 1000);
+
       function completeAnimation() {
         alert("Done!");
       }
@@ -45,13 +72,31 @@
         $("#box1").fadeIn(5000, completeAnimation);
       });
       $("#fadeOut").on("click", function () {
-        $("#box1").fadeOut();
+        $("#box1").fadeOut({ duration: 2000, easing: "linear" });
       });
       $("#fadeToggle").on("click", function () {
         $("#box1").fadeToggle();
       });
       $("#stop").on("click", function () {
         $("#box1").stop();
+      });
+      $("#slideDown").on("click", function () {
+        $("#box1").slideDown(5000);
+      });
+      $("#slideUp").on("click", function () {
+        $("#box1").slideUp(5000);
+      });
+
+      $("#animate").on("click", function () {
+        $("#box1").animate({ marginLeft: "100px" }, 2000, "swing");
+        $("#box2")
+          .animate({ marginLeft: "500px" }, 2000, "linear")
+          .delay(5000)
+          .animate({ marginTop: "200px" }, 2000, "linear")
+          .delay(5000)
+          .animate({ marginLeft: "5px" }, 2000, "linear")
+          .delay(5000)
+          .animate({ marginTop: "0px" }, 2000, "linear");
       });
     </script>
   </body>
