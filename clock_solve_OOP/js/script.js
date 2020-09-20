@@ -65,9 +65,9 @@ console.log("Script loaded");
 
 var clock = {
   constants: {
-    alpha: 360 / 60,
-    beta: 360 / 60,
-    delta: 360 / 12,
+    alpha: 360 / 60, // second arm travel in a second
+    beta: 360 / 60, // minute arm travel in a minute
+    delta: 360 / 12, // hour arm travel in an hour
   },
   arms: {
     hour: document.getElementById("hour"),
@@ -84,12 +84,10 @@ var clock = {
     minute: null,
     second: null,
   },
-
-  sound: new Audio("../clock_sound.wav"),
+  sound: new Audio("../heart_on_ice.mp3"),
   alarm: {
     hour: null,
     minute: null,
-    second: null,
   },
   getNow: function () {
     var time = new Date();
@@ -121,7 +119,6 @@ var clock = {
     var scope = this;
     console.log(scope);
     console.log(`Setting alarm at ${this.alarm.hour}:${this.alarm.minute}`);
-
     setInterval(function () {
       console.log(
         `Check for alarm at ${scope.alarm.hour}:${scope.alarm.minute}`
@@ -129,27 +126,22 @@ var clock = {
       var now = new Date();
       if (
         now.getHours() == scope.alarm.hour &&
-        now.getMinutes == scope.alarm.minute
+        now.getMinutes() == scope.alarm.minute
       ) {
         scope.sound.play();
       }
     }, 1000);
-
-    // if (this.now.hour === hour && this.now.minute === minute) {
-    //   this.sound.play();
-    // }
-    //   var sound = new Audio("../clock_sound.wav");
   },
   init: function () {
     this.getNow();
     this.getAngles();
     this.positionClockArms();
-    // this.setAlarm();
     setInterval(this.adjustAngles.bind(this), 1000);
+
     // var scope = this;
-    // setInterval(function () {
-    //   scope.adjustAngles();
-    // }, 1000);
+    // setInterval(function(){
+    //     scope.adjustAngles();
+    // }, 1000)
   },
 };
 
