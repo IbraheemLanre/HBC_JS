@@ -66,7 +66,7 @@ console.log("Script loaded");
 var clock = {
   constants: {
     alpha: 360 / 60,
-    beta: 360 / 60 / 60,
+    beta: 360 / 60,
     delta: 360 / 12,
   },
   arms: {
@@ -84,6 +84,13 @@ var clock = {
     minute: null,
     second: null,
   },
+
+  sound: new Audio("../clock_sound.wav"),
+  alarm: {
+    hour: null,
+    minute: null,
+    second: null,
+  },
   getNow: function () {
     var time = new Date();
     this.now.hour = time.getHours();
@@ -96,7 +103,7 @@ var clock = {
       this.constants.beta * (this.now.minute + this.now.second / 60);
     this.angles.hour =
       this.constants.delta *
-      (this.now.hour + this.now.minute / 60 + this.now.second / 360);
+      (this.now.hour + this.now.minute / 60 + this.now.second / 3600);
   },
   positionClockArms: function () {
     this.arms.second.style.transform = `rotate(${this.angles.second}deg)`;
@@ -108,10 +115,36 @@ var clock = {
     this.getAngles();
     this.positionClockArms();
   },
+  setAlarm: function (time) {
+    this.alarm.hour = time.split(":")[0];
+    this.alarm.minute = time.split(":")[1];
+    var scope = this;
+    console.log(scope);
+    console.log(`Setting alarm at ${this.alarm.hour}:${this.alarm.minute}`);
+
+    setInterval(function () {
+      console.log(
+        `Check for alarm at ${scope.alarm.hour}:${scope.alarm.minute}`
+      );
+      var now = new Date();
+      if (
+        now.getHours() == scope.alarm.hour &&
+        now.getMinutes == scope.alarm.minute
+      ) {
+        scope.sound.play();
+      }
+    }, 1000);
+
+    // if (this.now.hour === hour && this.now.minute === minute) {
+    //   this.sound.play();
+    // }
+    //   var sound = new Audio("../clock_sound.wav");
+  },
   init: function () {
     this.getNow();
     this.getAngles();
     this.positionClockArms();
+    // this.setAlarm();
     setInterval(this.adjustAngles.bind(this), 1000);
     // var scope = this;
     // setInterval(function () {
@@ -122,10 +155,22 @@ var clock = {
 
 clock.init();
 
-// clock.getNow();
-// clock.getAngles();
-// clock.positionClockArms();
-// setInterval(clock.adjustAngles.bind(clock), 1000);
+document.getElementById("alarm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  console.log(this.time.value);
+  clock.setAlarm(this.time.value);
+});
 
-// console.log(clock.now);
-// console.log(clock.angles);
+document.querySelector("#time").addEventListener("input", function (e) {
+  const reTime = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+  const time = this.value;
+  if (reTime.exec(time)) {
+    const minute = Number(time.substring(3, 5));
+    const hour = (Number(time.substring(0, 2)) % 12) + minute / 60;
+    this.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='20' cy='20' r='18.5' fill='none' stroke='%23222' stroke-width='3' /><path d='M20,4 20,8 M4,20 8,20 M36,20 32,20 M20,36 20,32' stroke='%23bbb' stroke-width='1' /><circle cx='20' cy='20' r='2' fill='%23222' stroke='%23222' stroke-width='2' /></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M18.5,24.5 19.5,4 20.5,4 21.5,24.5 Z' fill='%23222' style='transform:rotate(${
+      (360 * minute) / 60
+    }deg); transform-origin: 50% 50%;' /></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M18.5,24.5 19.5,8.5 20.5,8.5 21.5,24.5 Z' style='transform:rotate(${
+      (360 * hour) / 12
+    }deg); transform-origin: 50% 50%;' /></svg>")`;
+  }
+});
